@@ -22,7 +22,7 @@ export function _writeCameraBuffer(state: RenderState, entity: Entity) {
 
     if (camera.cameraBuffer) {
         state.device.queue.writeBuffer(camera.cameraBuffer, 0, viewMatrix);
-        state.device.queue.writeBuffer(camera.cameraBuffer, 64, camera.perspectiveProjection);
+        state.device.queue.writeBuffer(camera.cameraBuffer, 64, camera.projection);
     } else {
         console.warn("Camera buffer was not initialized! Ignoring...");
     }

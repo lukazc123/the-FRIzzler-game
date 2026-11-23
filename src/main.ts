@@ -9,40 +9,12 @@ import { GLTFParser } from "./parsers/GLTFParser.ts";
 import { Camera } from "./components/Camera.ts";
 import { computeSkins } from "./systems/SkinningSystem.ts";
 import { KeyframeAnimations } from "./components/KeyframeAnimation.ts";
+import { createLevel } from "./Level.ts";
 
 
 // ------ Create sample scene ------ //
 
-const gltfParser = new GLTFParser();
-/* const gltfContent = await fetch("data/demo_scene.gltf").then((r) => r.text());
-gltfParser.setJson(gltfContent, 'data/');
-
-const scene = await gltfParser.parseScene(0);
-if (!scene) {
-    throw Error("Could not get GLTF scene!");
-}
-console.log(scene);
-const icosphere = scene.getEntityByName('Icosphere');
-if (icosphere) {
-    playAnimation(scene, icosphere, 'IkosferaAkcija');
-}
-
-const cylinder = scene.getEntityByName('Okostje');
-if (cylinder) {
-    playAnimation(scene, cylinder, 'OkostjeAkcija')
-}*/
-
-const gltfContent = await fetch("data/little_guy.gltf").then((r) => r.text());
-gltfParser.setJson(gltfContent, 'data/');
-const scene = await gltfParser.parseScene(0);
-if (!scene) {
-    throw Error("Could not get GLTF scene!");
-}
-console.log(scene);
-const player = scene.getEntityByName('Okostje');
-if (player) {
-    playAnimation(scene, player, 'dance');
-}
+const scene = await createLevel();
 
 
 // ------ Initalize GPU/Rendering specific interfaces ------ //

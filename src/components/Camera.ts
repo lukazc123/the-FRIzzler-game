@@ -9,11 +9,14 @@ import type { Component } from "../Component.ts";
  * NOTE: Currently only supports perspective projection!
  * Extend yourselves if you need orthographic camera.
  */
+export enum ProjectionType { Perspective, Orthographic}
 export class Camera implements Component {
     private _aspect: number;    // aspect=width/height (of viewing plane)
     private _fovy: number;      // vertical field of view angle (in radians)
     private _near: number;      // distance of near plane
     private _far: number;       // distance of far plane
+    private _projectionType: ProjectionType = ProjectionType.Perspective;
+    private _orthoHeight: number = 10;
 
     private _perspectiveMatrix: mat4;
     // _isDirty marks that there was a change in camera parameters
@@ -68,17 +71,32 @@ export class Camera implements Component {
         return this._far;
     }
 
-    get perspectiveProjection(): mat4 {
+    setOrthographic(height: number) {
+        this._projectionType = ProjectionType.Orthographic;
+        this._orthoHeight = height;
+        this._isDirty = true;
+    }
+
+    setPerspective() {
+        this._projectionType = ProjectionType.Perspective;
+        this._isDirty = true;
+    }
+
+    get projection(): mat4 {
         if (this._isDirty) {
-            mat4.perspectiveZO(
-                this._perspectiveMatrix,
-                this._fovy,
-                this._aspect,
-                this._near,
-                this._far
-            )
+            if (this._projectionType === ProjectionType.Orthographic) {
+                const h = this._orthoHeight / 2;
+                const w = h * this._aspect;
+                mat4.orthoZO(this._perspectiveMatrix, -w, w, -h, h, this._near, this._far);
+            } else {
+                mat4.perspectiveZO(this._perspectiveMatrix, this._fovy, this._aspect, this._near, this._far);
+            }
             this._isDirty = false;
         }
         return this._perspectiveMatrix;
+    }
+
+    get perspectiveProjection(): mat4 {
+        return this.projection;
     }
 }

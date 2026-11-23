@@ -20,7 +20,7 @@ export type MaterialConstructor<T extends Material = Material> = new (...args: a
  * Creates a cube entity.
  * @returns An entity with mesh and transform
  */
-export async function createCube() {
+export async function createCube(color: vec4 = vec4.fromValues(1,1,1,1)) {
     const vertices = new Float32Array([
         -1, -1, -1,     0, 0, 0,    0, 0,   0, 0, 0,
         -1, -1,  1,     0, 0, 1,    0, 1,   0, 0, 0,
@@ -41,8 +41,8 @@ export async function createCube() {
         1, 0, 5,    5, 0, 4,
     ]);
     
-    const texture = await createTempTexture([1, 1, 1, 1]);
-    const material = new BasicMaterial(texture, vec4.fromValues(0.5, 1, 0, 1));
+    const texture = await createTempTexture(color);
+    const material = new BasicMaterial(texture, color);
 
     const cube = new Entity();
     const mesh = new Mesh();
