@@ -4,8 +4,10 @@ import { Transform, TransformType } from "./components/Transform.ts";
 import { Entity } from "./Entity.ts";
 import { Scene } from "./Scene.ts";
 import { createCube } from "./Utils.ts";
+import { PlayerController } from "./components/PlayerControl.ts";
 
 const ARENA = 50;
+
 
 async function addWall(scene: Scene, name: string, x: number, z: number, halfX: number, halfZ: number) {
     const wall = await createCube(vec4.fromValues(0.5, 0.5, 0.5, 1));
@@ -39,6 +41,7 @@ export async function createLevel(): Promise<Scene> {
     const pt = player.getComponent(Transform)!;
     pt.scale = vec3.fromValues(0.5, 0.5, 0.5);
     pt.location = vec3.fromValues(0, 0.5, 0);
+    player.addComponent(new PlayerController(8, 0.003)); 
     scene.addEntity(player);
 
     // top down camera

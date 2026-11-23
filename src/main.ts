@@ -10,6 +10,8 @@ import { Camera } from "./components/Camera.ts";
 import { computeSkins } from "./systems/SkinningSystem.ts";
 import { KeyframeAnimations } from "./components/KeyframeAnimation.ts";
 import { createLevel } from "./Level.ts";
+import { Input } from "./Input.ts";
+import { movePlayer } from "./systems/PlayerControlSystem.ts";
 
 
 // ------ Create sample scene ------ //
@@ -78,6 +80,8 @@ window.addEventListener('resize', (_) => resize());
 resize();
 
 
+const input = new Input(); // for mouse reset
+
 // ------ Start game loop ------ //
 
 let lastTime = performance.now();
@@ -89,13 +93,14 @@ function update(timestamp: number) {
     const dt = (timestamp - lastTime) / 1000;
     lastTime = timestamp;
 
+    movePlayer(scene, input, dt);
     animateScene(scene, dt);
     computeTransforms(scene);
     computeSkins(scene);
     updateBuffers(renderState, scene);
-
     render(renderState, scene);
 
+    input.mouseReset(); // in case we use the mouse movements, this ensures that it restes every frame
     requestAnimationFrame(update);
 }
 
