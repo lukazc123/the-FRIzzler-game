@@ -5,8 +5,9 @@ import { Entity } from "./Entity.ts";
 import { Scene } from "./Scene.ts";
 import { createCube } from "./Utils.ts";
 import { PlayerController } from "./components/PlayerControl.ts";
+import {BoxCollider, SphereCollider} from "./components/Collider.ts";
 
-const ARENA = 50;
+const ARENA = 8;
 
 
 async function addWall(scene: Scene, name: string, x: number, z: number, halfX: number, halfZ: number) {
@@ -15,6 +16,7 @@ async function addWall(scene: Scene, name: string, x: number, z: number, halfX: 
     const t = wall.getComponent(Transform)!;
     t.location = vec3.fromValues(x, 0.5, z);
     t.scale = vec3.fromValues(halfX, 0.5, halfZ);
+    wall.addComponent(new BoxCollider(vec3.fromValues(1, 1, 1), "world", [], vec3.fromValues(0, 0, 0)));
     scene.addEntity(wall);
 }
 
@@ -41,7 +43,8 @@ export async function createLevel(): Promise<Scene> {
     const pt = player.getComponent(Transform)!;
     pt.scale = vec3.fromValues(0.5, 0.5, 0.5);
     pt.location = vec3.fromValues(0, 0.5, 0);
-    player.addComponent(new PlayerController(8, 0.003)); 
+    player.addComponent(new PlayerController(8, 0.003));
+    player.addComponent(new SphereCollider(0.5, "player", ["world", "npc", "interaction"], 0.5));
     scene.addEntity(player);
 
     // top down camera

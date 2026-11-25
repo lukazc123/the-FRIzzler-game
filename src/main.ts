@@ -12,6 +12,8 @@ import { KeyframeAnimations } from "./components/KeyframeAnimation.ts";
 import { createLevel } from "./Level.ts";
 import { Input } from "./Input.ts";
 import { movePlayer } from "./systems/PlayerControlSystem.ts";
+import { updateCollisions } from "./systems/CollisionSystem.ts";
+import { PlayerController } from "./components/PlayerControl.ts";
 
 
 // ------ Create sample scene ------ //
@@ -79,6 +81,8 @@ function resize() {
 window.addEventListener('resize', (_) => resize());
 resize();
 
+const player = scene.getEntitiesByComponent(PlayerController)[0];
+if (!player) throw Error("ups");
 
 const input = new Input(); // for mouse reset
 
@@ -95,6 +99,8 @@ function update(timestamp: number) {
 
     movePlayer(scene, input, dt);
     animateScene(scene, dt);
+    computeTransforms(scene);
+    updateCollisions(scene, player);
     computeTransforms(scene);
     computeSkins(scene);
     updateBuffers(renderState, scene);
