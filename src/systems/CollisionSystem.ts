@@ -3,6 +3,7 @@ import type { Entity } from "../Entity.ts";
 import { Transform } from "../components/Transform.ts";
 import { mat4, vec3 } from "gl-matrix";
 import { BoxCollider, SphereCollider, InteractionBubble } from "../components/Collider.ts";
+import { PlayerController } from "../components/PlayerControl.ts";
 
 
 export function getGroundHeight(x: number, z: number){
@@ -13,14 +14,18 @@ export function getGroundHeight(x: number, z: number){
 export function snapToGround(player: Entity){
     const t = player.getComponent(Transform)!;
     const c = player.getComponent(SphereCollider)!;
+    const controller = player.getComponent(PlayerController)!;
     const height = c.height;
+    const location = t.location;
 
     // dobis lokacijo objekta pa spremenis y komponento na groundHeight
-    const location = t.location;
-    location[1] = getGroundHeight(location[0], location[2]) + height/2;
+    if(location[1] < getGroundHeight(location[0], location[2]) + height){
+        location[1] = getGroundHeight(location[0], location[2]) + height;
+        controller.velocity = 0;
+        controller.grounded = true;
+    }
     t.location = location;
 }
-
 export function Collision(player: Entity, scene: Scene){
     const t = player.getComponent(Transform)!;
     const c = player.getComponent(SphereCollider)!;

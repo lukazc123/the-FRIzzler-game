@@ -19,6 +19,10 @@ export function movePlayer(scene: Scene, input: Input, dt: number) {
         if (input.pressedKey("KeyS") || input.pressedKey("ArrowDown")) { moveDir[2] += 1; }
         if (input.pressedKey("KeyA") || input.pressedKey("ArrowLeft")) { moveDir[0] -= 1; }
         if (input.pressedKey("KeyD") || input.pressedKey("ArrowRight")) { moveDir[0] += 1; }
+        if (input.pressedKey("Space") && controller.grounded){
+            controller.velocity = controller.jumpSpeed;
+            controller.grounded = false;
+        }
 
         if (vec3.length(moveDir) > 0) {
             vec3.normalize(moveDir, moveDir);

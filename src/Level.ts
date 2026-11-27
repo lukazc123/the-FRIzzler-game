@@ -42,8 +42,8 @@ export async function createLevel(): Promise<Scene> {
     player.name = "Player";
     const pt = player.getComponent(Transform)!;
     pt.scale = vec3.fromValues(0.5, 0.5, 0.5);
-    pt.location = vec3.fromValues(0, 0.5, 0);
-    player.addComponent(new PlayerController(8, 0.003));
+    pt.location = vec3.fromValues(0, 5, 0);
+    player.addComponent(new PlayerController(8, 9, 0.003));
     player.addComponent(new SphereCollider(0.5, "player", ["world", "npc", "interaction"], 0.5));
     scene.addEntity(player);
 
