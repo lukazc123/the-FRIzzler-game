@@ -5,7 +5,7 @@ import { Entity } from "./Entity.ts";
 import { Scene } from "./Scene.ts";
 import { createCube } from "./Utils.ts";
 import { PlayerController } from "./components/PlayerControl.ts";
-import {BoxCollider, SphereCollider} from "./components/Collider.ts";
+import {BoxCollider, InteractionBubble, SphereCollider} from "./components/Collider.ts";
 
 const ARENA = 8;
 
@@ -46,6 +46,16 @@ export async function createLevel(): Promise<Scene> {
     player.addComponent(new PlayerController(8, 9, 0.003));
     player.addComponent(new SphereCollider(0.5, "player", ["world", "npc", "interaction"], 0.5));
     scene.addEntity(player);
+
+    // NPC
+    const npc = await createCube(vec4.fromValues(0.2, 0.2, 0.9, 0.5));
+    npc.name = "npc";
+    const nt = npc.getComponent(Transform)!;
+    nt.scale = vec3.fromValues(0.5, 0.5, 0.5);
+    nt.location = vec3.fromValues(5, 0.5, 5);
+    npc.addComponent(new BoxCollider([1, 1, 1], "npc", ["world", "player"], [0, 0, 0]));
+    npc.addComponent(new InteractionBubble(3, "interaction", ["player"]));
+    scene.addEntity(npc);
 
     // top down camera
     const cameraEntity = new Entity();

@@ -15,6 +15,7 @@ import { movePlayer } from "./systems/PlayerControlSystem.ts";
 import { updateCollisions } from "./systems/CollisionSystem.ts";
 import { PlayerController } from "./components/PlayerControl.ts";
 import { applyGravity } from "./systems/GravitySystem.ts";
+import { handleInteraction } from "./systems/InteractionSystem.ts";
 
 
 // ------ Create sample scene ------ //
@@ -103,6 +104,7 @@ function update(timestamp: number) {
     animateScene(scene, dt);
     computeTransforms(scene);
     updateCollisions(scene, player);
+    handleInteraction(player, scene);
     computeTransforms(scene);
     computeSkins(scene);
     updateBuffers(renderState, scene);

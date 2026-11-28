@@ -18,7 +18,8 @@ export function snapToGround(player: Entity){
     const height = c.height;
     const location = t.location;
 
-    // dobis lokacijo objekta pa spremenis y komponento na groundHeight
+    // ce je lokacija playerja pod tlemi ga postavs nazaj na tla pa mu das
+    // velocity 0 pa grounded = true
     if(location[1] < getGroundHeight(location[0], location[2]) + height){
         location[1] = getGroundHeight(location[0], location[2]) + height;
         controller.velocity = 0;
@@ -109,7 +110,7 @@ export function Collision(player: Entity, scene: Scene){
 }
 
 // prakticno kopija zgornga dela
-function Interactions(player: Entity, scene: Scene){
+export function detectInteractions(player: Entity, scene: Scene){
     const t = player.getComponent(Transform)!;
     const c = player.getComponent(SphereCollider)!;
     const radius = c.radius;
@@ -164,5 +165,5 @@ function Interactions(player: Entity, scene: Scene){
 export function updateCollisions(scene: Scene, player: Entity){
     Collision(player, scene);
     snapToGround(player);
-    // v main je po tej funkciji treba se klicat Interactions(), da dobis popup za interaction
+    // v main je po tej funkciji treba se klicat detectInteractions(), da dobis popup za interaction
 }
